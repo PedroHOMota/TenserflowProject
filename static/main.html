@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-beta.1.css" type="text/css">
+  <title>Tensorflow Recon</title>
+</head>
+
+<body onload="init()">
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6">
+              <canvas id="myCanvas" width="280" height="280" style="border:2px solid;"></canvas>
+			  <img id="canvasimg" style="position:absolute;top:10%;left:52%;" style="display:none;">
+            </div>
+            <div class="col-md-6">
+              <a class="btn btn-primary" href="" id="btnErase">Erase </a>
+			  <a class="btn btn-primary" href="" id="btnSend" onclick="UploadPic()">Send </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
+              <p class="" id="lblDIgit">Teste</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <a class="btn btn-primary" href="" id="btnChooseFile">Button </a>
+        </div>
+        <div class="col-md-6"></div>
+      </div>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+  <script>
+	var mousePressed = false;
+	var lastX, lastY;
+	var ctx;
+	function init() 
+	{
+		ctx = document.getElementById('myCanvas').getContext("2d");
+
+		$('#myCanvas').mousedown(function (e) {
+			mousePressed = true;
+			Draw(e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, false);
+		});
+
+		$('#myCanvas').mousemove(function (e) {
+			if (mousePressed) {
+				Draw(e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, true);
+			}
+		});
+
+		$('#myCanvas').mouseup(function (e) {
+			mousePressed = false;
+		});
+			$('#myCanvas').mouseleave(function (e) {
+			mousePressed = false;
+		});
+	}
+	function Draw(x, y, isDown) {
+		if (isDown) {
+			ctx.beginPath();
+			ctx.lineWidth = 9;
+			ctx.moveTo(lastX, lastY);
+			ctx.lineTo(x, y);
+			ctx.closePath();
+			ctx.stroke();
+		}
+		lastX = x; lastY = y;
+	}
+	
+	function clearArea() {
+		// Use the identity matrix while clearing the canvas
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
+		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+	}
+	
+	function UploadPic() {
+    
+    // Generate the image data
+    var Pic = document.getElementById("myCanvas").toDataURL("image/png");
+    Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "");
+	console.log(Pic);
+    // Sending the image data to Server
+    <!-- $.ajax({ -->
+        <!-- type: 'POST', -->
+        <!-- url: '/upload', -->
+        <!-- data: '{ "imageData" : "' + Pic + '" }', -->
+        <!-- contentType: 'application/json; charset=utf-8', -->
+        <!-- dataType: 'json', -->
+        <!-- success: function (msg) { -->
+            <!-- alert("Done, Picture Uploaded."); -->
+        <!-- } -->
+    <!-- }); -->
+	/*$.post("/upload", '{ "imageData" : ' + Pic + ' }', function(resbody)
+		{
+			//alert('retornot')
+		});*/
+	$.ajax({
+	  type: "POST",
+	  url: "/upload",
+	  data:{
+		imageData : Pic
+	  }
+	}).done(function() {
+	  console.log('sent');
+	});
+}
+
+</script>
+</body>
+
+</html>
