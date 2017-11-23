@@ -1,12 +1,10 @@
 from flask import Flask
-from flask import render_template
 from flask import request
-import re
 import base64
-import json
+import numpy as np
 from PIL import Image
 import io
-import tensorflow
+import DigitRecognizerKeras as dr
 
 
 app = Flask(__name__)
@@ -29,30 +27,20 @@ def loadDataToMemory():
 @app.route('/upload', methods=['POST'])
 def upload_file():
     print('chegou aqui')
-
+    #imgE=request.get_json(True)
     imgE = request.values['imageData']
-    imgD=base64.b64decode(bytes(imgE,"ascii"))
-    print(imgD)
+    print(imgE)
+    imgD=base64.b64decode(imgE)
+    #print(imgD)
     imgN = Image.open(io.BytesIO(imgD))
-    imgN=imgN.resize((28,28))
-    imgN.save("foo.png")
-    # file = request.files['file']
-    # file = request.get_json()["imageData"]
-    # file = str.encode(file)
-    # image = bytes(file)
-    # print(image)
-    # image = base64.standard_b64decode(image)
-    # pyplot.plot(image)
-    # pyplot.show()
-    # print(image)
-    # f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-
-    # add your custom code to check that the uploaded file is a valid image and not a malicious file (out-of-scope for this post)
-    # file.save(f)
-
-    # return render_template('index.html')
-    return "teste"
+    imgN=imgN.resize((28,28),Image.LANCZOS)
+    data = np.asarray(imgN.split()[-1])#As the collers are in the alpha channel, here I split the array taking only the alpha
+    #data = (lambda x: 255 - x)(np.asarray(imgN.split()[-1]))
+    #data.setflags(write=1)
+    data = np.ndarray.flatten(data)
+    ress=dr.recnoizeDigit(data)
+    print(ress)
+    return str(ress)
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+app.run(host='0.0.0.0', port=8080)
