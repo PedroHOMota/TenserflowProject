@@ -45,9 +45,10 @@ Python files in repository are structured as following:
 <br />
 **keras-mnist.h5**: As previously stated, this file contains the trained neural network.
 <br />
+<br />
 **static**: Folder containing front-end.
 <br />
-    &nbsp;***main.html**: Application's HTML page
+    &nbsp;**main.html**: Application's HTML page
 
 
 ### Front-end
