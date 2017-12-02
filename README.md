@@ -38,11 +38,16 @@ The backend(server) uses flask to create an API with the following routes:
 
 
 Python files in repository are structured as following:
+<br />
 **main.py**: Server file.
+<br />
 **NeuralNetworkTraining.py**: Python file used to create the model and train it, after its execution, the file "keras-mnist.h5" with the trained neural network is generated. 
+<br />
 **keras-mnist.h5**: As previously stated, this file contains the trained neural network.
+<br />
 **static**: Folder containing front-end.
-    **main.html**: Application's HTML page
+<br />
+    &nbsp;***main.html**: Application's HTML page
 
 
 ### Front-end
@@ -50,7 +55,6 @@ Python files in repository are structured as following:
 The front-end is an HTML page where the user can draw a number on a canvas and send it to the server to predict which number it was.
 
 
-## Built with
-***
+## Built using
 * [Pingendo](https://pingendo.com/)
-* [Visual Studio Code](https://code.visualstudio.com/)
+* [Visual Studio](https://www.visualstudio.com/)
