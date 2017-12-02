@@ -53,7 +53,7 @@ Python files in repository are structured as following:
 
 ### Front-end
 
-The front-end is an HTML page where the user can draw a number on a canvas and send it to the server to predict which number it was.
+The front-end is a HTML page where the user can draw a number on a canvas and send it to the server to predict which number it was.
 
 
 ## Built using
