@@ -6,26 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-beta.1.css" type="text/css">
-  <title>Tensorflow Recon</title>
+  <title>Digit Reconizer</title>
 </head>
 
 <body onload="init()">
-  <h1 style="background-color: coral; color:white; line-height: 150%;">Digit Reconizer</h1>
+  <h1 style="background-color: #428bca; color:white; line-height: 150%;">Digit Reconizer</h1>
   <div class="py-5">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
           <div class="row">
             <div class="col-md-4">
-              <div style="align-self: center;"> </div>
+				<div>
+				<p style="font-size: 250%;">Prediction:</p>
+				<p style="font-size: 250%;" id="prediction"/>
+				</div>
             </div>
             <div class="col-md-4"> 
+				<div>
 			  <canvas id="myCanvas" width="280" height="280" style="border:2px solid;"></canvas>
-              <img id="canvasimg" style="position:absolute;top:10%;left:52%;"> </div>
+              <img id="canvasimg" style="position:absolute;top:10%;left:52%;"> </div><p>Please, draw only a single number <br> on the canvas</p>
+			 </div>
             <div class="col-md-4">
-              <a  class="btn btn-primary" href="" id="btnSend" onclick="UploadPic()" value="Send">Send<a/>
-			 <br/><br/><br/>
-             <a  class="btn btn-primary" href="" id="btnErase" value="Erase" onclick="clearArea()">Erase<a/>
+              <input   type='button' class="btn btn-primary" href="" id="btnSend" onclick="UploadPic()" value="Send"/>
+			 <br/><br/>
+			  <input   type='button' class="btn btn-primary" href="" id="btnErase" onclick="clearArea()" value="Erase" />
             </div>
           </div>
         </div>
@@ -80,26 +85,23 @@
           	}
           	
           	function UploadPic() {
-              
-              // Generate the image data
-              var Pic = document.getElementById("myCanvas").toDataURL("image/png");
-              Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "");
-          	//console.log(Pic);
-              // Sending the image data to Server
-             
-          	
-          	$.ajax({
-          	  type: "POST",
-          	  url: "/upload",
-          	  data:{
-          		imageData : Pic
-          	  },
-          	  success: function(str)
-                  {
-          			alert(str);
-                  }
-          	})	
-          }
+				// Generate the image data
+				var Pic = document.getElementById("myCanvas").toDataURL("image/png");
+				Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, ""); //Removing unnecessary header
+				// Sending the image data to Server
+						
+				$.ajax({
+				type: "POST",
+				url: "/upload",
+				data:{
+					imageData : Pic
+				  },
+				success: function (data) {
+					$('#prediction').text(data)
+					clearArea();
+				}
+					});
+			}
         </script>
      
   <div class="py-5">
