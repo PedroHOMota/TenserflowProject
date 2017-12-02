@@ -5,7 +5,7 @@ from keras.utils import np_utils
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
-X_train = X_train.reshape(60000, 784) #Flattening
+X_train = X_train.reshape(60000, 784) #Flattening all images
 a= X_train[1]
 X_test = X_test.reshape(10000, 784)
 X_train = X_train.astype('float32')
@@ -19,9 +19,9 @@ Y_train = np_utils.to_categorical(y_train, n_classes)
 Y_test = np_utils.to_categorical(y_test, n_classes)
 
 model = Sequential()
-model.add(Dense(512, input_shape=(784,)))
-model.add(Activation('relu'))
-model.add(Dropout(0.2))
+model.add(Dense(512, input_shape=(784,))) #First Layer with 728 nodes and hidden layer with 512
+model.add(Activation('relu')) #f(x)=x^{+}=\max(0,x)
+model.add(Dropout(0.2)) #Prevent overfittting
 
 model.add(Dense(512))
 model.add(Activation('relu'))
@@ -41,3 +41,4 @@ history = model.fit(X_train, Y_train,
 model.save("./keras-mnist.h5")
 
 #Have to install h5py to save
+#Adapted from https://elitedatascience.com/keras-tutorial-deep-learning-in-python
